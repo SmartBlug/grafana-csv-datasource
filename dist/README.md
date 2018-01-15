@@ -2,9 +2,10 @@
 
 Your backend needs to implement 3 urls:
 
- * `/folder/` should return 200 ok. Used for "Test connection" on the datasource config page.
- * `/folder/search` used by the find metric options on the query tab in panels.
- * `/folder/query` should return metrics based on input.
+ * `/<folder>/` should return 200 ok. Used for "Test connection" on the datasource config page.
+ * `/<folder>/sources` should return the list of CSV within the group folder.
+ * `/<folder>/search` used by the find metric options on the query tab in panels.
+ * `/<folder>/query` should return metrics based on input.
 
 ## Installation
 
