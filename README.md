@@ -1,10 +1,11 @@
 ## Grafana CSV Datasource - a generic backend datasource
 
-Your backend needs to implement 3 urls:
+Your backend needs to implement 4 urls:
 
- * `/folder/` should return 200 ok. Used for "Test connection" on the datasource config page.
- * `/folder/search` used by the find metric options on the query tab in panels.
- * `/folder/query` should return metrics based on input.
+ * `/<folder>/` should return 200 ok. Used for "Test connection" on the datasource config page.
+ * `/<folder>/sources` should return the list of CSV within the group folder.
+ * `/<folder>/search` used by the find metric options on the query tab in panels.
+ * `/<folder>/query` should return metrics based on input.
 
 ## Installation
 
@@ -16,11 +17,23 @@ sudo service grafana-server restart
 
 You also need a backend server :
 ```
-sudo python /var/lib/grafana/plugins/grafana-csv-datasource/backend/PythonServer.py
+sudo python /var/lib/grafana/plugins/grafana-csv-datasource/backend/PythonServer.py -f ./folders
 ```
 
-Configure Source
-* URL : http://localhost:3000/sample
+where "folders" contains :
+ * one folder per group
+```
+./folders/sample
+```
+ * CSV within the group folder
+```
+./folders/sample/myFirstCSV.csv
+./folders/sample/mySecondCSV.csv
+...
+```
+
+Configure Source with the group folder
+* URL : http://localhost:3003/sample
 * Access : Proxy
 
 source should now be available in the data source type dropdown in the Add Data Source View.
