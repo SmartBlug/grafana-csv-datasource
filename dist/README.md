@@ -1,6 +1,6 @@
 ## Grafana CSV Datasource - a generic backend datasource
 
-Your backend needs to implement 3 urls:
+Your backend needs to implement 4 urls:
 
  * `/<folder>/` should return 200 ok. Used for "Test connection" on the datasource config page.
  * `/<folder>/sources` should return the list of CSV within the group folder.
