@@ -70,9 +70,15 @@ def find_metrics(folder):
 	req = request.get_json()
 	source = req.get('source', '')
 	# Load headers
+	#with open(path+str(folder)+"/"+source+".csv",'rb') as csvfile:
+	#	reader = csv.DictReader(csvfile, delimiter=';', quotechar='|')
+	#	fieldnames = reader.fieldnames
+
 	with open(path+str(folder)+"/"+source+".csv",'rb') as csvfile:
-		reader = csv.DictReader(csvfile, delimiter=';', quotechar='|')
-		fieldnames = reader.fieldnames
+		dialect = csv.Sniffer().sniff(csvfile.read(1024))
+		csvfile.seek(0) 
+		reader = csv.reader(csvfile, dialect)
+		fieldnames = reader.next()
 
 	target = req.get('target', '')
 	metrics = []
@@ -203,7 +209,10 @@ def query_metrics(folder):
 		if source=="":
 			return jsonify(results)
 		if source not in CSVs:
-			CSVs[source] = pd.read_csv(path+str(folder)+"/"+source+".csv",index_col=0 , delimiter=';')
+			with open(path+str(folder)+"/"+source+".csv",'rb') as csvfile:
+				dialect = csv.Sniffer().sniff(csvfile.read(1024))
+				CSVs[source] = pd.read_csv(path+str(folder)+"/"+source+".csv",index_col=0 , dialect=dialect)
+				#CSVs[source] = pd.read_csv(path+str(folder)+"/"+source+".csv",index_col=0 , delimiter=';', dialect=dialect)
 
 	#print(CSVs)
 	
@@ -229,7 +238,7 @@ def query_metrics(folder):
 			query_results[target["target"]] = pd.to_numeric(query_results[target["target"]].str.replace(',','.'), errors='coerce')
 		# On ajuste la date
 		query_results.index = pd.to_datetime(query_results.index).tz_localize('Europe/Paris')
-		print("query_results before timing filter",query_results)
+		#print("query_results before timing filter",query_results)
 		#print('timing Filter',ts_range)
 		query_results = query_results[(query_results.index >= pd.Timestamp(req['range']['from']).to_pydatetime()) & (query_results.index <= pd.Timestamp(req['range']['to']).to_pydatetime())]
 		#query_results = query_results[query_results.index.isin(pd.date_range(pd.Timestamp(req['range']['from']).to_pydatetime(), pd.Timestamp(req['range']['to']).to_pydatetime()))]
@@ -345,7 +354,7 @@ def main(argv):
 	     debug = True
 	#print 'Port is ', port
 	#print 'Folder is ', path
-	#print 'debug', debug
+	print 'debug', debug
 	
 	app.run(host=addr, port=port, debug=debug)
    
