@@ -11,7 +11,7 @@ Your backend needs to implement 4 urls:
 
 To install this plugin, clone this to your grafana plugins diretory :
 ```
-sudo git clone https://github.com/SmartBlug/grafana-csv-datasource /var/lib/grafana/plugins/
+sudo git clone https://github.com/SmartBlug/grafana-csv-datasource /var/lib/grafana/plugins/grafana-csv-datasource
 sudo service grafana-server restart
 ```
 
